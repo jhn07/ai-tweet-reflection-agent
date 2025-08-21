@@ -43,7 +43,7 @@ Enterprise-grade AI system for intelligent tweet generation with automated criti
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd grocery-ai-agent
+   cd ai-tweet-reflection-agent
    ```
 
 2. **Install dependencies**
@@ -51,6 +51,7 @@ Enterprise-grade AI system for intelligent tweet generation with automated criti
    pip install -r requirements.txt
    # or with uv
    uv install
+   uv sync
    ```
 
 3. **Set up environment**
