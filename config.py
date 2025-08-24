@@ -32,6 +32,9 @@ class TweetAgentConfig:
 MAX_ITERS_DEFAULT = 3
 QUALITY_SCORE_THRESHOLD = 0.78
 
+# Default planned steps for workflow tracking
+DEFAULT_PLANNED_STEPS = ["Generation", "Critique", "Rewrite", "Final Review"]
+
 # Multilingual prompts templates
 PROMPTS = {
     "ru": {
@@ -107,4 +110,6 @@ DEFAULT_INITIAL_STATE = {
     "iter": 0,
     "max_iters": MAX_ITERS_DEFAULT,
     "language": "ru",
+    "steps": [],
+    "planned_steps": DEFAULT_PLANNED_STEPS,
 }

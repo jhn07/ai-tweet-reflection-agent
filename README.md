@@ -13,6 +13,7 @@ Enterprise-grade AI system for intelligent tweet generation with automated criti
 - **Intelligent Tweet Generation**: AI-powered content creation with quality scoring
 - **Automated Critique System**: Self-evaluating AI that scores and improves content
 - **Iterative Improvement**: Automatic rewriting until quality threshold is met
+- **Progress Tracking**: Step-by-step workflow execution monitoring with detailed insights
 - **Multi-language Support**: Russian and English prompts with easy switching
 
 ### 🏗️ **Enterprise Architecture**
@@ -74,12 +75,18 @@ The system will automatically:
 
 Example output:
 ```
-========== FINAL ==========
-AI revolutionizes development, accelerating processes and improving code quality. 
-It helps automate routine tasks, allowing developers to focus on creative solutions. 
-#AI #Development #Innovation
+========== AI в медицине ==========
+Artificial intelligence in medicine is transforming diagnostics and treatment...
 ============================================================
 reason: accepted | best_score: 0.90
+============================================================
+PLANNED STEPS: ['Generation', 'Critique', 'Rewrite', 'Final Review']
+EXECUTED STEPS:
+  1. Tweet Generation (generation)
+     Content: Artificial intelligence in medicine is transforming...
+  2. Quality Assessment (critique)
+     Content: Score: 0.90
+     Score: 0.90
 ```
 
 ## 📚 Documentation

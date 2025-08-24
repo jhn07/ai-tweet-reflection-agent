@@ -60,18 +60,18 @@ graph = graph_builder.compile()
 if __name__ == "__main__":
 
     topics = [
-        "AI в медицине",
-        "Будущее транспорта",
-        "Экологические технологии",
-        "Блокчейн и финансы",
-        "VR в образовании",
+        "AI in medicine",
+        "Future of transport",
+        "Environmental technologies",
+        "Blockchain and finance",
+        "VR in education",
     ]
 
     results = []
 
     for topic in topics:
         initial_state: AgentState = {
-            "messages": [HumanMessage(content=f"Сгенерируй твит про {topic}")],
+            "messages": [HumanMessage(content=f"Generate a tweet about {topic}")],
             **DEFAULT_INITIAL_STATE  # use settings from config.py
         }
         
@@ -88,6 +88,20 @@ if __name__ == "__main__":
         print("="*60)
         print("reason:", stop_reason, "| best_score:", f"{result.get('best_score', 0):.2f}")
         print("candidates:", result.get("candidates", []))
+        print("="*60)
+        
+        # Print step tracking information
+        print("PLANNED STEPS:", result.get("planned_steps", []))
+        print("EXECUTED STEPS:")
+        for i, step in enumerate(result.get("steps", []), 1):
+            print(f"  {i}. {step.get('title', 'Unknown')} ({step.get('type', 'unknown')})")
+            print(f"     Content: {step.get('content', 'N/A')}")
+            if step.get('score') is not None:
+                print(f"     Score: {step.get('score'):.2f}")
+            if step.get('issues'):
+                print(f"     Issues: {', '.join(step.get('issues', []))}")
+            if step.get('tips'):
+                print(f"     Tips: {', '.join(step.get('tips', []))}")
         print("="*60)
 
 

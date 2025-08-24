@@ -113,4 +113,13 @@ Answer in JSON format:
             "candidates": candidates,
             "best_tweet": best_tweet,
             "best_score": best_score,
+            # Add step tracking
+            "steps": state.get("steps", []) + [{
+                "type": "critique",
+                "title": "Quality Assessment",
+                "content": f"Score: {result.score:.2f}",
+                "score": result.score,
+                "issues": result.issues,
+                "tips": result.tips
+            }]
         }

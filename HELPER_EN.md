@@ -17,7 +17,8 @@ python main.py
 - System generates a tweet on the given topic
 - Automatically critiques quality (score 0.0-1.0)
 - Rewrites for improvement if needed
-- Outputs final result with metrics
+- Tracks each step with detailed progress information
+- Outputs final result with metrics and step-by-step breakdown
 
 ### 2. Changing Tweet Topic
 Edit line 68 in `main.py`:
@@ -292,6 +293,83 @@ creative_config = TweetAgentConfig(
 )
 ```
 
+## 📊 PROGRESS TRACKING
+
+### NEW: Step-by-Step Workflow Monitoring
+
+The system now provides detailed tracking of each workflow step with comprehensive information.
+
+#### Understanding Step Information
+
+Each step in the workflow contains:
+```python
+{
+    "type": "generation|critique|rewrite",
+    "title": "Human-readable step name", 
+    "content": "Brief content preview",
+    "score": 0.85,  # Quality score (for critique steps)
+    "issues": ["List of identified problems"],
+    "tips": ["List of improvement suggestions"]  
+}
+```
+
+#### Accessing Progress Information
+
+```python
+result = graph.invoke(state)
+
+# View planned workflow stages
+print("PLANNED STEPS:", result.get("planned_steps"))
+# Output: ['Generation', 'Critique', 'Rewrite', 'Final Review']
+
+# View executed steps with details
+for i, step in enumerate(result.get("steps", []), 1):
+    print(f"{i}. {step['title']} ({step['type']})")
+    if step.get('score'):
+        print(f"   Score: {step['score']:.2f}")
+    if step.get('issues'):
+        print(f"   Issues: {', '.join(step['issues'])}")
+```
+
+#### Step Types
+
+**Generation Steps:**
+- Type: `generation`
+- Contains: Tweet content preview
+- Score: Not applicable
+
+**Critique Steps:**
+- Type: `critique` 
+- Contains: Quality assessment details
+- Score: 0.0-1.0 quality rating
+- Issues: List of identified problems
+- Tips: Improvement suggestions
+
+**Rewrite Steps:**
+- Type: `rewrite`
+- Contains: Improved content preview  
+- Tips: Issues being addressed
+
+#### Real-World Example
+
+```
+PLANNED STEPS: ['Generation', 'Critique', 'Rewrite', 'Final Review']
+EXECUTED STEPS:
+  1. Tweet Generation (generation)
+     Content: AI transforms healthcare by enhancing diagnostic precision...
+  2. Quality Assessment (critique)
+     Content: Score: 0.75
+     Score: 0.75
+     Issues: Tweet could be more engaging, Add specific examples
+     Tips: Include real-world applications, Use more dynamic language
+  3. Tweet Improvement (rewrite)  
+     Content: Improved version: AI revolutionizes healthcare with 95% diagnostic...
+     Tips: Tweet could be more engaging, Add specific examples
+  4. Quality Assessment (critique)
+     Content: Score: 0.92
+     Score: 0.92
+```
+
 ## 📊 MONITORING AND DEBUGGING
 
 ### Understanding Logs
@@ -337,6 +415,13 @@ Tweet...
 ============================================================
 reason: accepted | best_score: 0.90
 candidates: [('Tweet1', 0.75), ('Tweet2', 0.90)]
+PLANNED STEPS: ['Generation', 'Critique', 'Rewrite', 'Final Review']
+EXECUTED STEPS:
+  1. Tweet Generation (generation)
+     Content: AI revolutionizes healthcare by improving diagnostic accuracy...
+  2. Quality Assessment (critique) 
+     Content: Score: 0.90
+     Score: 0.90
 ```
 
 ### Problem Diagnosis
@@ -448,7 +533,9 @@ def generate_tweet(topic: str, language: str = "ru",
         "tweet": get_final_tweet(result),
         "score": result.get("best_score", 0),
         "reason": "accepted" if not result.get("needs_revision") else "max_iters",
-        "candidates": result.get("candidates", [])
+        "candidates": result.get("candidates", []),
+        "steps": result.get("steps", []),
+        "planned_steps": result.get("planned_steps", [])
     }
 
 # Usage

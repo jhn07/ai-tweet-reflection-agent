@@ -62,4 +62,13 @@ def tweet_rewrite(state: AgentState) -> dict:
             "messages": [resp],
             "iter": state["iter"] + 1, # count rewrite as a new attempt
             # critique_items will be left as is; the next node will check everything again
+            # Add step tracking
+            "steps": state.get("steps", []) + [{
+                "type": "rewrite",
+                "title": "Tweet Improvement",
+                "content": f"Improved version: {text[:50]}..." if len(text) > 50 else f"Improved version: {text}",
+                "score": None,
+                "issues": None,
+                "tips": issues if issues else None
+            }]
         }

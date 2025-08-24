@@ -59,4 +59,13 @@ def tweet_generation(state: AgentState) -> dict:
         return {
             "messages": [resp],        # add_messages will add this to history
             "iter": state["iter"] + 1, # increase iteration counter
+            # Add step tracking
+            "steps": state.get("steps", []) + [{
+                "type": "generation",
+                "title": "Tweet Generation",
+                "content": resp.content[:100] + "..." if len(resp.content) > 100 else resp.content,
+                "score": None,
+                "issues": None,
+                "tips": None
+            }]
         }

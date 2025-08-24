@@ -48,6 +48,10 @@ class AgentState(TypedDict):
     best_score: NotRequired[float]                    # maximum score
     candidates: NotRequired[List[Tuple[str, float]]]  # (tweet, score)
     stop_reason: NotRequired[str]                     # accepted | max_iters
+    
+    # Progress tracking fields
+    steps: NotRequired[List[dict]]                    # detailed steps information
+    planned_steps: NotRequired[List[str]]             # planned step names
 
 
 def validate_agent_state(state: AgentState) -> bool:
